@@ -401,7 +401,7 @@ class GAN():
                                  s1_bands=self.s1bands, clip_s2=False)
         else:
             if l_image_id is None:
-                print("We defined our own index for image name")
+                #print("We defined our own index for image name")
                 l_image_id = [i for i in range(batch.shape[0])]
         assert len(l_image_id) == batch.shape[0], "Wrong size of the name of the images is {} should be {} ".format(
             len(l_image_id), batch.shape[0])

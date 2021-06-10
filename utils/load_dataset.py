@@ -18,10 +18,10 @@ def modify_array(raster_array):
     The normalization is also taken applied"""
 
     if raster_array.shape[-1] > 4:  # there is the cloud mask which is the 5th band, should be removed
-        # TODO think of a better way more generalized to remove the cloud band
+
         raster_array = raster_array[:4, :]
     raster_array = np.moveaxis(raster_array, 0, -1)  # transform to channel last
-    # TODO normalization
+    #
     return convert_array(raster_array)
 
 

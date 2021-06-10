@@ -327,3 +327,17 @@ def load_scaler(input_dir, bands) -> dict:
     scaler = load(open(path_scaler, 'rb'))
     return {bands: scaler}
 
+def load_dict_scaler(input_dir: str, l_band_group: list) -> dict:
+    """
+
+    Args:
+        input_dir:
+        l_band_group:
+
+    Returns:
+
+    """
+    dict_scaler = {}
+    for bands in l_band_group:
+        dict_scaler.update(load_scaler(input_dir, bands))
+    return dict_scaler
