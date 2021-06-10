@@ -1,0 +1,34 @@
+name: training_env
+
+channels:
+  - conda-forge
+  - defaults
+  - anaconda
+  - conda-forge/label/broken
+
+dependencies:
+  - python=3.6
+  - gdal>=2.3
+  - pip=20.*
+  - shapely>=1.6.1
+  - opencv>=3.1.0
+  - ipykernel
+  - pandas
+  - cudnn
+  - seaborn
+  - scikit-learn>=0.23
+  - scipy
+  - notebook
+  - keras
+  - anaconda::tensorflow-gpu>=2.0.0
+  - pip :
+      - geojson==2.5.0
+      - buzzard==0.6.0
+      - click
+      - ruamel.yaml
+      - tensorflow-estimator==2.1.*
+      - jupyter-tensorboard
+      - joblib
+      - tensorboard_plugin_profile
+      - runai
+

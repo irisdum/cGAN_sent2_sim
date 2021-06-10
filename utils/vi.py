@@ -1,0 +1,134 @@
+# A file which contains all the information concerning the vegetation index functions
+from constant.gee_constant import DICT_BAND_LABEL,DICT_BAND_X,DICT_EVI_PARAM
+import numpy as np
+
+
+
+def extract_red_nir(image,dict_band):
+    band_red = image[:, :, dict_band["R"][0]]
+    band_nir = image[:, :, dict_band["NIR"][0]]
+    return band_red,band_nir
+
+
+
+def compute_ndvi(image,dict_band=None,image_id=None):
+    """:param image an array
+    :param dict_band a dict with the position of the band within the array
+    :param path_csv path to the csv which contains global max or min of the array
+    :param image_id string, needs to be set if path_csv not None
+    :returns the ndvi as an array"""
+    if dict_band is None:
+        print("We consider it is a predicted image with R G B NIR only ")
+        dict_band=DICT_BAND_LABEL
+    assert len(image.shape)==3,"Wrong dimension of the image should be 3 not {}".format(image.shape)
+    assert image.shape[-1]<image.shape[0],"Check the dimension of the image should be channel last. {}".format(image.shape)
+    band_red,band_nir=extract_red_nir(image,dict_band)
+    #print("NDVI")
+    mask = (band_nir+band_red)==0
+    ndvi = np.zeros(band_nir.shape)
+    ndvi[ mask ] = 0
+    #print(np.count_nonzero(ndvi))
+    ndvi[ ~mask ] = ((band_nir-band_red)/(band_nir+band_red))[ ~mask ]
+
+    return ndvi
+
+def compute_bai(image,dict_band=None):
+    if dict_band is None:
+        print("We consider it is a predicted image with R G B NIR only ")
+        dict_band=DICT_BAND_LABEL
+    band_red, band_nir = extract_red_nir(image, dict_band)
+    terme1=np.square(0.1-band_red)
+    terme2=np.square(0.06-band_nir)
+    return np.divide(1,terme1*terme2)
+
+def compute_msavi(image,dict_band=None):
+    if dict_band is None:
+        print("We consider it is a predicted image with R G B NIR only ")
+        dict_band=DICT_BAND_LABEL
+    band_red, band_nir = extract_red_nir(image, dict_band)
+    sqrt_terme=np.square(2*band_nir+1)-8*(band_nir-band_red)
+    return np.divide(2*band_nir+1-np.sqrt(sqrt_terme),2)
+
+def compute_vi(image,vi,dict_band=None,param=None,path_csv=None,image_id=None):
+    """vi a string of the vegetation index"""
+    if vi!= "identity":
+        assert len(image.shape)==3, "Image shape (n,n,channel) only accepted not {} ".format(image.shape)
+    if dict_band is None:
+        print("We consider it is a predicted image with R G B NIR only ")
+        dict_band=DICT_BAND_LABEL
+    assert vi in ["msavi","bai","ndvi","identity","evi"], "The vegetation index {} has no function defined. please define a function in utils.vi".format(vi)
+    if vi=="ndvi":
+        return compute_ndvi(image,dict_band,path_csv=path_csv,image_id=image_id)
+    if vi=="bai":
+        return compute_bai(image,dict_band)
+    if vi=="msavi":
+        return compute_msavi(image,dict_band)
+    if vi=="identity":
+        return image
+    if vi=="evi":
+        return compute_evi(image,dict_band,param)
+
+def compute_evi(image,dict_band,param=None):
+    if param is None:
+        param=DICT_EVI_PARAM
+    red=image[:,:,dict_band["R"]]
+    nir=image[:,:,dict_band["NIR"]]
+    blue=image[:, :, dict_band["B"]]
+    evi_res= param["G"]*np.divide(nir-red,nir+param["C1"]*red-param["C2"]*blue+param["L"])
+    return np.resize(evi_res,(image.shape[0],image.shape[1]))
+
+
+def diff_metric(image_pre, image_post, vi, dict_band_pre=None, dict_band_post=None, image_id=None, path_csv=None):
+    """:param image_id:
+    :param path_csv:
+    :param image_pre the image before the event
+    :param image post the image post transformation
+    :vi a vegetation index could be msavu,bai or ndvi"""
+    if dict_band_pre is None:
+        dict_band_pre=DICT_BAND_X
+    if dict_band_post is None:
+        dict_band_post=DICT_BAND_LABEL
+    pre_vi=compute_vi(image_pre,vi,dict_band_pre,image_id=image_id,path_csv=path_csv)
+    post_vi=compute_vi(image_post,vi,dict_band_post,image_id=image_id,path_csv=path_csv)
+    return pre_vi-post_vi
+
+def batch_diff_metric(batch_pre,batch_post,vi, dict_band_pre=None, dict_band_post=None,list_image_id=None, path_csv=None):
+    """compute dvi for each tile of the batch WARNING the 1st dim of the array correspond of the nber of tiles !!"""
+    assert batch_post.shape[0]==batch_pre.shape[0], "Batch pre has {} elem whereas batch post {} elem".format(batch_pre.shape[0],batch_post.shape[0])
+    batch_dvi=np.ones((batch_pre.shape[0],batch_pre.shape[1],batch_pre.shape[2]))
+    if list_image_id is None:
+        list_image_id=[None]*batch_post.shape[0]
+    for i in range(batch_pre.shape[0]):
+        batch_dvi[i,:,:]=diff_metric(batch_pre[i,:,:,:],batch_post[i,:,:,:],vi=vi,dict_band_pre=dict_band_pre,
+                                     dict_band_post=dict_band_post,image_id=list_image_id[i],path_csv=path_csv)
+    return batch_dvi
+
+def batch_vi(batch,dict_band=None,param=None,path_csv=None,l_image_id=None,vi="ndvi"):
+    assert len(batch.shape)>=3,"Wrong input should be a batch of images RGBNIR not {}".format(batch.shape)
+    if l_image_id is None:
+        l_image_id=[None]*batch.shape[0]
+    output_vi=np.ones((batch.shape[0],batch.shape[1],batch.shape[2]))
+    for i in range(batch.shape[0]):
+        output_vi[i,:,:]=compute_vi(batch[i,:,:,:],vi=vi,dict_band=dict_band,param=param,path_csv=path_csv,
+                                    image_id=l_image_id[i])
+    return output_vi
+
+
+
+def diff_relative_metric(image_pre,image_post,vi,dict_band_pre=None,dict_band_post=None, image_id=None, path_csv=None):
+    """:param image_pre the image before the event
+        :param image post the image post transformation
+        :vi a vegetation index could be msavu,bai or ndvi"""
+    if dict_band_pre is None:
+        dict_band_pre = DICT_BAND_X
+    if dict_band_post is None:
+        dict_band_post = DICT_BAND_LABEL
+    pre_vi = compute_vi(image_pre, vi, dict_band_pre,image_id=image_id,path_csv=path_csv)
+    post_vi = compute_vi(image_post, vi, dict_band_post,image_id=image_id,path_csv=path_csv)
+    return np.divide(pre_vi-post_vi,np.sqrt(np.abs(pre_vi)))
+
+
+
+
+
+

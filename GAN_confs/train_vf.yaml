@@ -1,0 +1,49 @@
+### YAML TO THE TRAIN PARAMETERS
+
+######################################
+#### DATASET PARAM #############
+######################################
+
+train_directory: "/tmp/input_large_dataset/train/" #path to the dataset where the train data are stored, recommended to copy them on a temporary directory of the computer
+val_directory: "/tmp/input_large_dataset/val/"  #path where the validation data are stored
+normalization: true
+#Gives the index for each band in x or y (label).
+dict_band_x: {"VV":[0,2],"VH":[1,3],"R,G,B":[4,5,6],"NIR":[7]}#normalization is going to be compute on each of these group of bands
+dict_band_label: {"R,G,B":[0,1,2],"NIR":[3]}
+dict_rescale_type: {"VV": "StandardScaler", "VH":"StandardScaler","R,G,B":"StandardScaler","NIR":"StandardScaler"}
+s2_scale: 0.142 #Once the values are rescaled, to rescale them between -1 and 1 (narrow histogramm) band from S2 are multiplied by s2_scale
+s1_scale: 0.2 #if null values from processing_constant.py are used
+s1bands: ["VV","VH"]
+s2bands: ["R,G,B","NIR"]
+
+lim_train_tile: null #set to an int to limit the values of the total training tiles taken, must be a "divisible" by batch_size$number of gpu available
+lim_val_tile: null #set to an int to limit the values of the total validation tiles taken
+batch_size: 2
+
+######################################
+#### TRAINING PARAM #############
+######################################
+## Parameter for the Adam optimizer
+lr: 0.0001 #learning rate
+fact_g_lr: 1 #multiply lr in the Generator Adam optimiser
+beta1: 0.5
+lambda: 100 #100 is recoomended #lambda is the factor applied to the L1 loss abs(||G(z)-y||)
+
+load_model: null #if not null is the iteration where we load our model, the training will start over at ite+1
+epoch: 700 #number of epoch
+
+training_number: 0 #To modify, the checkpoints, logs will be saved in dir <path_training_dir>/training_<training_number>
+training_dir: "/srv/osirim/idumeur/trainings/" #the model images and checkpoint will be stored at training_dir/trainining_number
+# The model will be saved every saving step epoch
+multi_gpu: true #the nber of GPU used for the training. Keep in mind that with multiple GPU, the weights are updated each
+  # batch_size*n_device_avalaible tiles
+im_saving_step: 1 #every n epochs image from the training set are saved
+weights_saving_step: 1 # every n epochs the model is saved
+metric_step: 1 #every n iterations when the validation metrics are computed. An iteration is the number of batches that goes into the Network
+
+## Label smoothing
+real_label_smoothing: [1.0,1.0] #if you do not want to apply label smoothing [1,1]
+fake_label_smoothing: [0.0,0.0] #if you do not want to apply label smoothing [0,0]
+
+
+

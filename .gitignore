@@ -1,0 +1,15 @@
+/test_kangaroo_data2/
+/test_data
+/test_kangaroo_image
+/confs
+/Downloads/
+/**/*.tiff
+/**/*.prj
+/**/*.shp
+/**/*.shx
+/**/*.qpj
+/**/*.cpg
+/**/*.dbf
+/notebooks/
+/old_notebooks/
+
