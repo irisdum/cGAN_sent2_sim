@@ -1,5 +1,5 @@
 
-model_name: GAN_v0
+model_name: cGan
 
 # DIMENSION DATA
 input_shape: [256,256,8] #represent the dimension of one image (one tile) as the input of the generator
@@ -30,7 +30,7 @@ do_rate: 0.5
 #describe the whole discriminator architecture
 discri_opt_padding: SYMMETRIC #"CONSTANT" for ZeroPadding, REFLECT or SYMMETRIC
 
-layer_key: ["padding","stride","kernel","nfilter"] #corresponds to the parameter name to be modified in the following dict
+layer_key: ["padding","stride","kernel","nfilter"] #corresponds to the parameter name for each keys in the dict_discri_archi
 dict_discri_archi:
   1:
     - 1
@@ -60,7 +60,7 @@ dict_discri_archi:
 discri_dense_archi:
   1:
     - 1
-  #the values will be zipped with layer key
+    -
 ## last layer activation leaky relu alpha_param
 lrelu_alpha: 0.2 #useful only if lrelu
 d_activation: "lrelu" #could also be lrelu or relu, corresponds to the activation of the discriminator
@@ -68,7 +68,3 @@ d_last_activ: sigmoid
 
 
 
-add_discri_white_noise: false #boolean if True white noise is added to the input data
-add_relu_after_noise: true
-
-add_discri_noise: false #if set to true add_discri_white_noise should be set to false !!!!

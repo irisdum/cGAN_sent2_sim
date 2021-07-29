@@ -16,7 +16,7 @@ s1_scale: 0.2 #if null values from processing_constant.py are used
 s1bands: ["VV","VH"]
 s2bands: ["R,G,B","NIR"]
 
-lim_train_tile: null #set to an int to limit the values of the total training tiles taken, must be a "divisible" by batch_size$number of gpu available
+lim_train_tile: 496 #set to an int to limit the values of the total training tiles taken, must be a "divisible" by batch_size$number of gpu available
 lim_val_tile: null #set to an int to limit the values of the total validation tiles taken
 batch_size: 2
 
@@ -37,9 +37,9 @@ training_dir: "/srv/osirim/idumeur/trainings/" #the model images and checkpoint 
 # The model will be saved every saving step epoch
 multi_gpu: true #the nber of GPU used for the training. Keep in mind that with multiple GPU, the weights are updated each
   # batch_size*n_device_avalaible tiles
-im_saving_step: 10 #every n epochs image from the training set are saved
-weights_saving_step: 250 # every n epochs the model is saved
-metric_step: 250 #every n iterations when the validation metrics are computed. An iteration is the number of batches that goes into the Network
+im_saving_step: 50 #every n epochs image from the training set are saved
+weights_saving_step: 10 # every n epochs the model is saved
+metric_step: 124 #every n iterations when the validation metrics are computed. An iteration is the number of batches that goes into the Network
 
 ## Label smoothing
 real_label_smoothing: [1.0,1.0] #if you do not want to apply label smoothing [1,1]
