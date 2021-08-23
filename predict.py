@@ -26,7 +26,20 @@ def load_generator(path_yaml, path_weight):
     print("Loaded model from disk")
     return loaded_model
 
-def main(path_model,training_nber,l_weight,dataset=None,pref="val",path_csv=None):
+def main(path_model,training_nber,l_weight,dataset=None,pref="val"):
+    """
+
+    Args:
+        path_model:
+        training_nber:
+        l_weight:
+        dataset:
+        pref:
+        path_csv: unused
+
+    Returns:
+
+    """
     print(type(l_weight))
     assert len(l_weight) > 0, "No prediction will be made as no weights given "
     path_training_dir = path_model + "training_{}/".format(training_nber)
@@ -39,10 +52,9 @@ def main(path_model,training_nber,l_weight,dataset=None,pref="val",path_csv=None
         #path_weight, founded = find_weight_path(lw,w)
         #assert founded is True, "No path weight nb {} founded in {}".format(w, lw)
         #generator=load_generator(l[0], path_weight) # laod the weight
-        predict_iter_on_val(path_model, training_nber, select_weight=w, save=True,dataset=dataset,prefix_save=pref,
-                            path_csv=path_csv,generator=None)
+        predict_iter_on_val(path_model, training_nber, select_weight=w, save=True,dataset=dataset,prefix_save=pref)
 
 if __name__ == '__main__':
     parser = _argparser()
-    main(parser.model_path,parser.tr_nber,parser.weights,parser.dataset,parser.pref,parser.path_csv)
+    main(parser.model_path,parser.tr_nber,parser.weights,parser.dataset,parser.pref)
 

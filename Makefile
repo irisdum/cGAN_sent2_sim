@@ -12,7 +12,7 @@ training_dir=/srv/osirim/idumeur/trainings/new_model_corr/
 training_number=42
 pred_dataset=${target_directory}${output_split_dir_name}/test/
 weight=295
-pref_pred_image=tr${training_number}_w_${weight}_test_d6
+pref_pred_image=tr${training_number}_w_${weight}_test
 
 
 train_model:

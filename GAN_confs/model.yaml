@@ -1,5 +1,5 @@
 
-model_name: cGan
+model_name: cGan #will be the name of the directory where all training directories are saved
 
 # DIMENSION DATA
 input_shape: [256,256,8] #represent the dimension of one image (one tile) as the input of the generator

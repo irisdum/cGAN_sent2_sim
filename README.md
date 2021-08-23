@@ -33,6 +33,7 @@ In order to train a model two yaml should be modified, examples available in GAN
 Then run 
 ```gan_train.sh path_to_model_yaml path_to_train_yaml ``` 
 
+
 ### Supervise the training
 
 #### Tensorboard : metric supervision
@@ -49,12 +50,10 @@ If in remote machine : `tensorboard --logdir <path> --host 0.0.0.0`
 
 Eventually you can also look at how the images look like during the training. 
 
-Open the notebook Visualize_training_data
+Open the notebook Figure_plot
 
 
-### Assessing the performance : 
 
-The notebooks describing the results are available in ""
 
 ### Prediction
 
@@ -63,9 +62,18 @@ To run prediction of the model. You can run in python
 
 
 
+model_path : path where all the training directories of one model are contained
+tr_nber: number used to name the training directory
+dataset : path to the directory which contains the two subdirectories dataX and test 
+pref : string used to name the directory where all the predicted tiles are saved
+weights: int, corresponds of the weights from the model and training number to use to run the prediction
+
+
+You can also use the gan_predict.sh or look at the Makefile with `make predict` command. 
+
 ### Compute metrics
 
-Open Notebooks Assessment_cGAN-CD
+Open Notebooks Assessment_cGAN_CD
 
 
 
