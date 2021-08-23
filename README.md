@@ -1,4 +1,4 @@
-# sent2-cloud-remover
+# cGAN_sent2_sim
 These software codes can be used for non-profit academic research only.
 They are distributed under the terms of the GNU general public license v3.
 
