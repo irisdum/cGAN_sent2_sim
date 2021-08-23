@@ -72,11 +72,10 @@ def find_FVS(EVS, diff_image, mean_vec, kernel_dim, padding="symmetric"):
     diff_image = np.pad(diff_image,
                         ((0, 0), (i_before, i_after - 1), (i_before, i_after - 1)), padding)
 
-    # print("Before padding shape {} then {}".format(input_dim, diff_image.shape))
+
     feature_vector_set = []
     i = i_before
-    # print(diff_image.shape[1] - i_after)
-    # print(diff_image.shape[0] - i_after)
+
     count = 0
     while i < diff_image.shape[1] - i_after + 1:
         j = i_before
@@ -90,8 +89,7 @@ def find_FVS(EVS, diff_image, mean_vec, kernel_dim, padding="symmetric"):
             j = j + 1
             count += 1
         i = i + 1
-    # print("before multiply shape feature vector {}".format(np.array(feature_vector_set).shape))
-    # print(EVS.shape)
+
     FVS = np.dot(np.array(feature_vector_set) - mean_vec,
                  EVS)  # Feature_vector_space (Npixels,h*h*nchannel) EVS dim (h*h*nchannel,S number PCA components)
     # FVS dim will be (Npixel, S)
@@ -174,7 +172,9 @@ def ACP_on_batch(batch1, batch2, kernel_dim=4, n_components=3, k=2, padding="sym
                  load_dir=None, band_name="red"):
     """
     Args:
-        path_save:
+        band_name: for saving or loading model purpose only, used to name the model
+        load_dir: if not None, location where to load the model
+        path_save: if not None, path where to store the model
         band: should be a list, by default 0 [0]
         batch1:
         batch2:

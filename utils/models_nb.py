@@ -8,7 +8,7 @@ from utils.image_find_tbx import find_image_indir
 from utils.open_yaml import open_yaml
 
 
-def predict_iter_on_val(path_model, training_nber, select_weight=100, save=True, dataset=None,prefix_save="val",path_csv=None,generator=None):
+def predict_iter_on_val(path_model, training_nber, select_weight=100, save=True, dataset=None,prefix_save="val"):
     """Run a prediction of the model and save the images if required and plot them too
     :param dataset: 
     """
