@@ -59,8 +59,8 @@ The notebooks describing the results are available in ""
 ### Prediction
 
 To run prediction of the model. You can run in python
-`predict.py --model_path ${model_path}   --tr_nber ${train_nber} --dataset ${dataset} --pref ${pref} --weights ${weight} --path_csv ${path_csv}`
-You can also use the gan_predict.sh or look at the Makefile with make predict command. 
+`predict.py --model_path ${model_path}   --tr_nber ${train_nber} --dataset ${dataset} --pref ${pref} --weights ${weight}`
+
 
 
 ### Compute metrics
