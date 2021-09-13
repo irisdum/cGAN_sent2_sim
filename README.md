@@ -2,7 +2,11 @@
 These software codes can be used for non-profit academic research only.
 They are distributed under the terms of the GNU general public license v3.
 
-Code corresponding to **INSERT PAPER NAME*
+Code corresponding to I. Dumeur, Y. Chen, F. Sur, Z.-S. Zhou. Sentinel-2 RGB and NIR bands
+simulation after fire events using a multi-temporal conditional
+generative adversarial network. Research report HAL-03327421, 2021, https://hal.archives-ouvertes.fr/hal-03327421
+
+Data used for this research are available in : https://drive.google.com/drive/folders/1PSob58o66WE5l-RDcImVcrc67C7HlDCR?usp=sharing
 
 ## The environment : 
 Use the specific training conda environment : env/training_env.yaml : 
